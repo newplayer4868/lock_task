@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lockRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <Button
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/musicButton"
+        android:layout_alignStart="@+id/musicButton"
+        android:layout_alignEnd="@+id/musicButton"
+        android:layout_margin="16dp"
+        android:layout_marginStart="-286dp"
+        android:layout_marginTop="-48dp"
+        android:layout_marginEnd="272dp"
+        android:layout_marginBottom="16dp"
+        android:text="이미지 보기" />
+
+    <Button
+        android:id="@+id/musicButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="음악 듣기"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="16dp" />
+
+    <TextView
+        android:id="@+id/lockInfoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="잠금 중입니다..."
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        android:layout_centerInParent="true" />
+    <TextView
+        android:id="@+id/presetInfoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="잠금 정보 로딩 중..."
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:padding="16dp"
+        android:textAlignment="center"/>
+    <Button
+        android:id="@+id/unlockButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="긴급 해제"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="32dp"
+        android:background="@android:color/holo_red_dark"
+        android:textColor="#ffffff" />
+</RelativeLayout>

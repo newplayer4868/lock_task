@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 검색창 -->
+    <SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:iconifiedByDefault="false"
+        android:queryHint="위치를 검색하세요" />
+
+    <!-- 지도 프래그먼트 -->
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@id/search_view"
+        android:layout_marginTop="8dp" />
+
+    <!-- 슬라이더 -->
+    <SeekBar
+        android:id="@+id/rangeSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/map"
+        android:layout_marginTop="12dp"
+        android:max="1000" />
+
+    <!-- 반경 표시 텍스트 -->
+    <TextView
+        android:id="@+id/radiusTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="범위: 500m"
+        android:layout_below="@id/rangeSeekBar"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- 위치 확인 버튼 -->
+    <Button
+        android:id="@+id/confirm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radiusTextView"
+        android:layout_marginTop="16dp"
+        android:text="위치 확인" />
+
+    <!-- 범위 설정 완료 버튼 -->
+    <Button
+        android:id="@+id/confirmRangeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/confirm_button"
+        android:layout_marginTop="8dp"
+        android:text="범위 설정 완료" />
+</RelativeLayout>

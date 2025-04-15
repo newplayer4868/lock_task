@@ -1,0 +1,34 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="시간을 선택하세요"
+        android:paddingBottom="12dp"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/startTimeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="시작 시간 선택" />
+
+    <Button
+        android:id="@+id/endTimeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="종료 시간 선택"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="다음"
+        android:layout_marginTop="24dp" />
+</LinearLayout>

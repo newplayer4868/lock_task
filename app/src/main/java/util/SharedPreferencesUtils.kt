@@ -6,6 +6,8 @@ import android.content.Context
 import android.util.Log
 import model.Preset
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import model.MemoItem
 import java.io.File
 
 object SharedPreferencesUtils {
@@ -220,6 +222,22 @@ object SharedPreferencesUtils {
 
     private fun getPrefs(context: Context) =
         context.getSharedPreferences("lock_state", Context.MODE_PRIVATE)
+    fun saveMemoList(context: Context, list: List<MemoItem>) {
+        val prefs = context.getSharedPreferences("memo_storage", Context.MODE_PRIVATE)
+        val json = Gson().toJson(list)
+        prefs.edit().putString("memo_list", json).apply()
+        Log.d("MemoSave", "저장된 JSON: $json") // ✔️ 로그
+    }
+
+    fun loadMemoList(context: Context): MutableList<MemoItem> {
+        val prefs = context.getSharedPreferences("memo_storage", Context.MODE_PRIVATE)
+        val json = prefs.getString("memo_list", null)
+        Log.d("MemoLoad", "불러온 JSON: $json") // ✔️ 로그
+
+        val type = object : TypeToken<List<MemoItem>>() {}.type
+        return if (json != null) Gson().fromJson(json, type) else mutableListOf()
+    }
+
 
 
 }

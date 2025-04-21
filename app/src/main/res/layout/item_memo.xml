@@ -1,0 +1,143 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="#9DC7C7"
+    android:elevation="2dp"
+    android:layout_marginBottom="8dp">
+
+    <!-- 제목 + 체크박스 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/editTextTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="할 일 제목"
+            android:maxLines="1"
+            android:inputType="textPersonName"
+            android:background="@null"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <!-- ▼ 상세설정 토글 -->
+    <TextView
+        android:id="@+id/textExpandToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="▼ 상세 설정"
+        android:textColor="#2196F3"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- 👇 펼쳐지는 상세 설정 영역 -->
+    <LinearLayout
+        android:id="@+id/layoutDetailSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginTop="8dp">
+
+        <!-- 설명 -->
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="설명 입력"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:maxLines="4"
+            android:gravity="top|start"
+            android:background="@null"
+            android:textSize="14sp" />
+
+        <!-- 날짜 + 시간 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/textDueDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="기한 선택"
+                android:textColor="#888888"
+                android:textSize="14sp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/textDueTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="시간 선택"
+                android:textColor="#888888"
+                android:textSize="14sp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <!-- 분류 선택 -->
+        <TextView
+            android:id="@+id/textCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="분류 선택"
+            android:textColor="#555"
+            android:padding="8dp"
+            android:background="@drawable/bg_category_border"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="8dp" />
+
+        <!-- 분류 선택 옵션들 -->
+        <LinearLayout
+            android:id="@+id/layoutCategoryOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/optionUrgentImportant"
+                style="@style/CategoryOptionStyle"
+                android:text="긴급and중요" />
+
+            <TextView
+                android:id="@+id/optionUrgent"
+                style="@style/CategoryOptionStyle"
+                android:text="긴급" />
+
+            <TextView
+                android:id="@+id/optionImportant"
+                style="@style/CategoryOptionStyle"
+                android:text="중요" />
+
+            <TextView
+                android:id="@+id/optionNone"
+                style="@style/CategoryOptionStyle"
+                android:text="둘 다 아님" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

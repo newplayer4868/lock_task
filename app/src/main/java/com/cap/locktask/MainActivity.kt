@@ -24,4 +24,8 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(bottomNav, navController)
 
     }
+
+
+
+
 }

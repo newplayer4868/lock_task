@@ -6,13 +6,27 @@ import com.cap.locktask.manager.LockPresetManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import model.Preset
+//val all presetNames모든 프리셋을 여기다 담아
 
+//val loc 기기의 현재 위치 담는 코드(활용)
+//val location 핸드폰 기기의 현재 위치를 담는 코드(본진)
+
+//val now //여기에 캘린더 정보 시간 정보 호출
+//val currentHour //여기에 지금 시간
+//val currentMinute //지금 분
+//val currentDayOfWeek 요일 저장
+
+
+//
 object PresetEvaluator {
 
     suspend fun evaluateAllPresets(context: Context): Preset? {
         return withContext(Dispatchers.IO) {
             Log.d("PresetEvaluator", "🧠 evaluateAllPresets() 진입 완료")
+            //모든 프리셋을 여기다 담아 val all presetNames
             val allPresetNames = SharedPreferencesUtils.getAllPresetNames(context)
+            Log.d("PresetEvaluator", "📋 전체 프리셋 이름: $allPresetNames")
+
             val location = try {
                 Log.d("PresetEvaluator", "🌍 현재 위치 획득 시도")
                 val loc = LocationHelper.getCurrentLocation(context)
@@ -34,7 +48,7 @@ object PresetEvaluator {
             val currentMinute = now.get(java.util.Calendar.MINUTE)
             val currentDayOfWeek = now.get(java.util.Calendar.DAY_OF_WEEK) // 1 = 일요일
 
-            Log.d("PresetEvaluator", "📋 전체 프리셋 이름: $allPresetNames")
+
             Log.d("PresetEvaluator", "🕓 현재 시각: $currentHour:$currentMinute")
             Log.d("PresetEvaluator", "📅 현재 요일: $currentDayOfWeek")
             Log.d("PresetEvaluator", "📍 현재 위치: ${location?.latitude}, ${location?.longitude}")
@@ -64,6 +78,8 @@ object PresetEvaluator {
                     Log.d("PresetEvaluator", "   ├─ 위치 조건: ${preset.latitude}")
                     Log.d("PresetEvaluator", "   ├─ 위치 조건: ${preset.longitude}")
                     Log.d("PresetEvaluator", "   └─ 잠금 타입: ${preset.lockType}")
+                    Log.d("PresetEvaluator", "   └─앱: ${preset.selectedApps}")
+
 
                     val matched = PresetConditionUtil.isPresetMatched(context, preset, location)
 
@@ -84,4 +100,5 @@ object PresetEvaluator {
             return@withContext null
         }
     }
+
 }

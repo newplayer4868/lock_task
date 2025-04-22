@@ -1,13 +1,17 @@
 package ui.preset
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.cap.locktask.R
 import model.Preset
 import com.cap.locktask.utils.SharedPreferencesUtils
+import com.cap.locktask.worker.PresetCheckWorker
 import viewmodel.PresetViewModel
 
 class SummaryFragment : Fragment() {
@@ -61,6 +65,11 @@ class SummaryFragment : Fragment() {
 
             Toast.makeText(requireContext(), "프리셋 저장 완료!", Toast.LENGTH_SHORT).show()
 
+            val request = OneTimeWorkRequestBuilder<PresetCheckWorker>().build()
+            WorkManager.getInstance(requireContext()).enqueue(request)
+
+
+            Log.d("AlarmReceiver", "✅ PresetCheckWorker 실행 요청 완료")
             requireActivity().finish()
         }
 

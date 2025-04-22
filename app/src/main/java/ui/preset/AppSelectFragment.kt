@@ -60,13 +60,19 @@ class AppSelectFragment : Fragment() {
                 setCompoundDrawablesWithIntrinsicBounds(appIcon, null, null, null)
                 compoundDrawablePadding = 16
 
-                setOnCheckedChangeListener { _, isChecked ->
+                setOnCheckedChangeListener { buttonView, isChecked ->
                     if (isChecked) {
-                        selectedApps.add(app.packageName)
+                        if (selectedApps.size >= 2) {
+                            buttonView.isChecked = false // ✅ 체크 해제
+                            Toast.makeText(context, "최대 2개까지만 선택할 수 있어요.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            selectedApps.add(app.packageName)
+                        }
                     } else {
                         selectedApps.remove(app.packageName)
                     }
                 }
+
 
                 setPadding(12, 12, 12, 12)
                 textSize = 16f

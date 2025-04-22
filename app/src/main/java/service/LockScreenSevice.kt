@@ -10,14 +10,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.cap.locktask.R
 import com.cap.locktask.manager.LockPresetManager
 import com.cap.locktask.utils.PresetEvaluator
 import com.cap.locktask.utils.SharedPreferencesUtils
+import com.cap.locktask.worker.PresetCheckWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import model.Preset
 import java.util.Date
@@ -55,6 +60,7 @@ class LockScreenService : Service() {
 
 
         val preset = intent?.getParcelableExtra<Preset>("preset")
+
         if (preset != null) {
             LockPresetManager.saveIfNotExists(applicationContext, preset)
         }
@@ -69,6 +75,16 @@ class LockScreenService : Service() {
 
 
         val runPreset = SharedPreferencesUtils.loadPreset(applicationContext, "runpreset")
+        val allowedApps = runPreset?.selectedApps ?: emptyList()
+        val appContainer = lockScreenView?.findViewById<LinearLayout>(R.id.appShortcutContainer)
+        val selectedApps = runPreset?.selectedApps
+        if (!selectedApps.isNullOrEmpty()) {
+            val targetPackage = selectedApps[0]
+            getSharedPreferences("monitor_prefs", MODE_PRIVATE)
+                .edit()
+                .putString("target_package", targetPackage)
+                .apply()
+        }
 
         if (runPreset != null) {
             Log.d(TAG, "🟢 복사본 프리셋 정보")
@@ -120,6 +136,9 @@ class LockScreenService : Service() {
         val inflater = LayoutInflater.from(this)
         lockScreenView = inflater.inflate(R.layout.l_lockscreen_layout, null)
         val timeTextView = lockScreenView?.findViewById<TextView>(R.id.timeTextView)
+        val unlockBtn = lockScreenView?.findViewById<Button>(R.id.unlockButton)
+        val runPreset = SharedPreferencesUtils.loadPreset(applicationContext, "runpreset")
+        val infoTextView = lockScreenView?.findViewById<TextView>(R.id.presetInfoTextView)
 
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
@@ -135,14 +154,33 @@ class LockScreenService : Service() {
         )
         CoroutineScope(Dispatchers.Main).launch {
             while (lockScreenView != null) {
-                val now = java.text.SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-                timeTextView?.text = now
-                kotlinx.coroutines.delay(1000)  // 1초마다 갱신
+                val cal = java.util.Calendar.getInstance()
+                val hour = cal.get(java.util.Calendar.HOUR_OF_DAY)
+                val minute = cal.get(java.util.Calendar.MINUTE)
+                val second = cal.get(java.util.Calendar.SECOND)
+
+                val nowFormatted = String.format("%02d:%02d:%02d", hour, minute, second)
+                timeTextView?.text = nowFormatted
+
+                // 프리셋 종료 시간 파싱
+                val endTimeStr = runPreset?.endTime ?: "00:00"
+                val endHour = endTimeStr.split(":").getOrNull(0)?.toIntOrNull() ?: -1
+                val endMinute = endTimeStr.split(":").getOrNull(1)?.toIntOrNull() ?: -1
+                // 현재 시각 - 1분
+                val oneMinuteAgo = cal.clone() as java.util.Calendar
+                oneMinuteAgo.add(java.util.Calendar.MINUTE, -1)
+
+
+                if (hour == endHour && minute == endMinute + 1) {
+                    val request = OneTimeWorkRequestBuilder<PresetCheckWorker>().build()
+                    WorkManager.getInstance(applicationContext).enqueue(request)
+                }
+                delay(1000)
             }
         }
-        val unlockBtn = lockScreenView?.findViewById<Button>(R.id.unlockButton)
-        val runPreset = SharedPreferencesUtils.loadPreset(applicationContext, "runpreset")
-        val infoTextView = lockScreenView?.findViewById<TextView>(R.id.presetInfoTextView)
+
+
+
 
         val infoText = runPreset?.let {
             """
@@ -154,6 +192,52 @@ class LockScreenService : Service() {
         } ?: "⚠️ 프리셋 정보 없음"
 
         infoTextView?.text = infoText
+// 앱 바로가기 버튼 생성
+        val shortcutContainer = lockScreenView?.findViewById<LinearLayout>(R.id.appShortcutContainer)
+        val pm = packageManager
+        val selectedApps = runPreset?.selectedApps ?: emptyList()
+
+        getSharedPreferences("monitor_prefs", MODE_PRIVATE)
+            .edit()
+            .putStringSet("target_packages", selectedApps.toSet())
+            .apply()
+
+        selectedApps.forEach { packageName ->
+            try {
+                val icon = pm.getApplicationIcon(packageName)
+                val launchIntent = pm.getLaunchIntentForPackage(packageName)
+
+                if (launchIntent != null) {
+                    val shortcutBtn = android.widget.ImageButton(this).apply {
+                        Toast.makeText(this@LockScreenService, "${packageName} 실행 중입니다", Toast.LENGTH_SHORT).show()
+
+                        setImageDrawable(icon)
+                        layoutParams = LinearLayout.LayoutParams(150, 150).apply {
+                            marginEnd = 16
+                        }
+                        background = null
+                        contentDescription = pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0))
+                        setOnClickListener {
+                            startActivity(launchIntent.apply {
+                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            })
+
+                            // 🔽 잠금 화면만 제거
+                            lockScreenView?.let {
+                                windowManager.removeView(it)
+                                lockScreenView = null
+                            }
+
+                        }
+                    }
+                    shortcutContainer?.addView(shortcutBtn)
+                } else {
+                    Log.w(TAG, "⚠️ $packageName 실행 Intent 없음")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ $packageName 아이콘 불러오기 실패", e)
+            }
+        }
 
         // 긴급 해제 가능 여부 판단
         if ((runPreset?.unlocknum ?: 0) <= 0) {

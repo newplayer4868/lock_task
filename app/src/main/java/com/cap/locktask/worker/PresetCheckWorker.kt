@@ -21,10 +21,6 @@ class PresetCheckWorker(context: Context, params: WorkerParameters) : CoroutineW
         Log.d("PresetCheckWorker", "500초 딜레이")
         kotlinx.coroutines.delay(500)
         Log.d("PresetCheckWorker", "🔁 doWork() 진입 - 조건 평가 시작")
-
-
-        Log.d("PresetCheckWorker", "🌀 PresetCheckWorker 작동 시작됨")
-
         val presetNames = SharedPreferencesUtils.getAllPresetNames(applicationContext)
         Log.d("PresetCheckWorker", "📦 저장된 프리셋 수: ${presetNames.size}")
 

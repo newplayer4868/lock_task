@@ -14,6 +14,7 @@ object LockStateManager {
         var remainingUnlocks: Int = 3
 
     )
+
     fun updateStayTime(context: Context, presetName: String, isInside: Boolean) {
         val state = getState(presetName)
 

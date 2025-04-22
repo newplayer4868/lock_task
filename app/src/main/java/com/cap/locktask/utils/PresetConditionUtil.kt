@@ -6,23 +6,84 @@ import android.util.Log
 import model.Preset
 import java.util.*
 
+//private fun isTimeMatched(preset: Preset): Boolean  프리셋 삽입해서 내부의 시간
+//조건안에 현재 시간이 있는지 파악하여 참거짓 반한
+
+//fun isLocationMatched(preset: Preset, userLocation: Location?): Boolean {
+//사용자가 프리셋 안에 설정된 범위 안에 존재하고 있는가?에대한 응답 함수
+
+//private fun isDayOfWeekMatched(preset: Preset): Boolean {
+//현재 요일이 일치하는가데 대한 함수
+
+
 object PresetConditionUtil {
 
-    fun isPresetMatched(context: Context, preset: Preset, location: Location?): Boolean {
-
-    if (!preset.isactivity) {
+    fun isPresetMatched(context: Context, preset: Preset, location: Location?): Boolean
+    {
+//만약 프리셋이 활동 중이지 않으면 이거 가동할 가치가 없어
+        if (!preset.isactivity) {
             Log.d("PresetConditionUtil", "❌ 비활성화 상태: ${preset.name}")
             return false
         }
-
+        //만약 프리셋 시간 비교해서 틀리면 (시간 범위 내에 없으면 작동하지마
         if (!isTimeMatched(preset)) {
             Log.d("PresetConditionUtil", "⏰ 시간 조건 불만족 - ${preset.name}")
+            Log.d("PresetConditionUtil", "도대체 뭘 리턴하는거지${isTimeMatched(preset)}")
             return false
-        }
+        }else
+        {Log.d("PresetConditionUtil", "도대체 뭘 리턴하는거지${isTimeMatched(preset)}")}
+
+        //만약 활성화 요일 아니면 잠금 구동하지마
         if (!isDayOfWeekMatched(preset)) {
             Log.d("PresetConditionUtil", "📅 요일 조건 불만족 - ${preset.name}")
             return false
         }
+
+
+        if (preset.lockType == "어플 사용량 잠금") {
+            val maxMillis = convertTimeToMillis(preset.Time)
+            val totalUsed = preset.selectedApps.orEmpty().sumOf { app ->
+                AppUsageTracker.getUsageTime(context, app)
+            }
+
+            val currentApp = getForegroundPackageName(context)
+
+            if (preset.selectedApps?.contains(currentApp) == true) {
+                Log.d("PresetConditionUtil", "✅ 감시 대상 앱 사용 중 → 잠금 유지 안 함")
+                return false
+            }
+
+            Log.d("PresetConditionUtil", "🚫 어플 사용량 검사: 총 $totalUsed / 목표 $maxMillis")
+
+            if (totalUsed < maxMillis) {
+                Log.d("PresetConditionUtil", "⛔ 아직 부족 → 잠금 유지")
+                return true
+            } else {
+                Log.d("PresetConditionUtil", "✅ 사용량 만족 → 잠금 해제")
+                return false
+            }
+        }
+
+
+        if (preset.lockType == "어플 할당량 잠금") {
+            val requiredMillis = convertTimeToMillis(preset.Time)
+            val totalUsed = preset.selectedApps.orEmpty().sumOf { app ->
+                AppUsageTracker.getUsageTime(context, app)
+            }
+
+            Log.d("PresetConditionUtil", "🔍 어플 사용량 총합: ${totalUsed / 1000}초 / 목표: ${requiredMillis / 1000}초")
+
+            if (totalUsed < requiredMillis) {
+                Log.d("PresetConditionUtil", "⛔ 사용량 부족 → 잠금 유지")
+                return true // 잠금 유지
+            } else {
+                Log.d("PresetConditionUtil", "✅ 충분히 사용 → 잠금 해제")
+                return false
+            }
+        }
+
+        //목적지 잠금 해제야?
+        //그럼 복잡해지는데
 
         if (preset.lockType == "목적지 잠금 해제") {
             val presetName = preset.name ?: return false
@@ -73,21 +134,31 @@ object PresetConditionUtil {
         Log.d("PresetConditionUtil", "✅ 모든 조건 만족: ${preset.name}")
         return true
     }
+    fun getForegroundPackageName(context: Context): String? {
+        val am = context.getSystemService(Context.ACTIVITY_SERVICE) as android.app.ActivityManager
+        val taskInfo = am.getRunningTasks(1)
+        return taskInfo.firstOrNull()?.topActivity?.packageName
+    }
 
     private fun convertTimeToMillis(time: String?): Long {
         val minutes = time?.toIntOrNull() ?: return 0L
         return minutes * 60_000L
     }
 
-
+//시간 정보 비교해주는 코드
+//val result 안에는 설정 시간 안에 현재 시간이 있는지 파악해주는 결과가 반환됨
     private fun isTimeMatched(preset: Preset): Boolean {
+        //일단 캘린더에서 지금에 대한 정보 뺴오기
         val now = Calendar.getInstance()
+        //now에서 시간 분 빼오기
         val hour = now.get(Calendar.HOUR_OF_DAY)
         val minute = now.get(Calendar.MINUTE)
-        val current = hour * 60 + minute
 
+        //시간:분인걸 분으로 통합
+        val current = hour * 60 + minute
         val start = convertTimeToMinutes(preset.startTime)
         val end = convertTimeToMinutes(preset.endTime)
+
 
         if (start == null || end == null) {
             Log.d("PresetConditionUtil", "⏰ 시간 정보 없음 - 조건 검사 통과")
@@ -117,7 +188,7 @@ object PresetConditionUtil {
     }
 
 
-
+//이건 string으로 받은 시작,종료 시간을 변환해주는 코드
     private fun convertTimeToMinutes(time: String?): Int? {
         return time?.split(":")?.let {
             if (it.size != 2) return null
@@ -127,6 +198,8 @@ object PresetConditionUtil {
             h * 60 + m
         }
     }
+
+    //프리셋에서 위치 조건 비교하는 코드
     fun isLocationMatched(preset: Preset, userLocation: Location?): Boolean {
         if (preset.latitude == null || preset.longitude == null || preset.radius == null || userLocation == null) return true
 
@@ -141,7 +214,7 @@ object PresetConditionUtil {
         return distance <= preset.radius
     }
 
-
+//요일 맞는가에 대한 비교 함수
     private fun isDayOfWeekMatched(preset: Preset): Boolean {
         val today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) // 1 (일요일) ~ 7 (토요일)
         val koreanDays = listOf("일", "월", "화", "수", "목", "금", "토")
@@ -150,11 +223,6 @@ object PresetConditionUtil {
         return preset.week?.contains(todayKorean) ?: true
     }
 
-
-    private fun isLocationMatched(preset: Preset): Boolean {
-        // TODO: 나중에 현재 위치가 preset 범위 안에 있는지 비교
-        return true // 지금은 무조건 통과
-    }
 
 
 }

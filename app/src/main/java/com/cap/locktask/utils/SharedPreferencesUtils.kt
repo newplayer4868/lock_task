@@ -9,6 +9,55 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import model.MemoItem
 import java.io.File
+import java.util.Date
+import java.util.Locale
+
+
+object AppUsageTracker {
+    private const val USAGE_PREFS = "AppUsagePrefs"
+    private const val DATE_KEY = "last_reset_date"
+
+    fun addUsageTime(context: Context, packageName: String, millis: Long) {
+        maybeResetUsage(context)
+
+        val prefs = context.getSharedPreferences(USAGE_PREFS, Context.MODE_PRIVATE)
+        val key = "usage_$packageName"
+        val previous = prefs.getLong(key, 0L)
+        prefs.edit().putLong(key, previous + millis).apply()
+    }
+
+    fun getUsageTime(context: Context, packageName: String): Long {
+        maybeResetUsage(context)
+
+        val prefs = context.getSharedPreferences(USAGE_PREFS, Context.MODE_PRIVATE)
+        return prefs.getLong("usage_$packageName", 0L)
+    }
+
+    // 🔁 날짜 바뀌었으면 모든 usage_ 데이터 초기화
+    private fun maybeResetUsage(context: Context) {
+        val prefs = context.getSharedPreferences(USAGE_PREFS, Context.MODE_PRIVATE)
+        val today = getTodayString()
+        val lastDate = prefs.getString(DATE_KEY, null)
+
+        if (lastDate != today) {
+            Log.d("AppUsageTracker", "📆 날짜 변경 감지 ($lastDate → $today) → 사용량 초기화")
+            val editor = prefs.edit()
+            val keys = prefs.all.keys.filter { it.startsWith("usage_") }
+            for (key in keys) {
+                editor.remove(key)
+            }
+            editor.putString(DATE_KEY, today)
+            editor.apply()
+        }
+    }
+
+    private fun getTodayString(): String {
+        val formatter = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return formatter.format(Date())
+    }
+}
+
+
 
 object SharedPreferencesUtils {
     private const val PREFS_NAME = "ButtonPrefs"

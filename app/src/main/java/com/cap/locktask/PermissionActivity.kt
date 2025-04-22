@@ -1,6 +1,7 @@
 package com.cap.locktask
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import service.AppMonitorService
 
 class PermissionActivity : AppCompatActivity() {
 
@@ -21,7 +23,11 @@ class PermissionActivity : AppCompatActivity() {
 
         val locationBtn = findViewById<Button>(R.id.btn_request_A_permissions)
         val overlayBtn = findViewById<Button>(R.id.btn_request_B_permissions)
+        val accessibilityBtn = findViewById<Button>(R.id.btn_request_C_permissions)
 
+        accessibilityBtn.setOnClickListener {
+            openAccessibilitySettings()
+        }
         // 초기 색상
         updatePermissionButtonState(locationBtn, isGranted(Manifest.permission.ACCESS_FINE_LOCATION))
         updatePermissionButtonState(overlayBtn, Settings.canDrawOverlays(this))
@@ -71,20 +77,37 @@ class PermissionActivity : AppCompatActivity() {
         }
 
     }
+    private fun openAccessibilitySettings() {
+        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+    }
+    private fun isAccessibilityServiceEnabled(): Boolean {
+        val expectedComponentName = ComponentName(this, AppMonitorService::class.java.name)
+        val enabledServices = Settings.Secure.getString(
+            contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        )
+        return enabledServices?.split(":")?.any { it == expectedComponentName.flattenToString() } == true
+    }
+
 
     override fun onResume() {
         super.onResume()
 
         val locationGranted = isGranted(Manifest.permission.ACCESS_FINE_LOCATION)
         val overlayGranted = Settings.canDrawOverlays(this)
+        val accessibilityGranted = isAccessibilityServiceEnabled()
 
         updatePermissionButtonState(findViewById(R.id.btn_request_A_permissions), locationGranted)
         updatePermissionButtonState(findViewById(R.id.btn_request_B_permissions), overlayGranted)
+        updatePermissionButtonState(findViewById(R.id.btn_request_C_permissions), accessibilityGranted)
 
-        if (locationGranted && overlayGranted) {
+        if (locationGranted && overlayGranted && accessibilityGranted) {
             navigateToMain()
         }
     }
+
 
     private fun navigateToMain() {
         startActivity(Intent(this, MainActivity::class.java))

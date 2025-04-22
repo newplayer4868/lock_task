@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#56C8B9"
+    android:background="@color/background"
     android:padding="16dp">
 
     <!-- 최상단 버튼 -->
@@ -49,5 +49,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="16dp"
-        android:background="#9CC5C5"/>
+        android:background="@color/make_result_color"
+        />
 </LinearLayout>

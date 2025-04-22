@@ -34,7 +34,6 @@ class SummaryFragment : Fragment() {
         }
 
         saveButton.setOnClickListener {
-            val currentPreset = viewModel.preset.value ?: return@setOnClickListener
 
             val name = nameInput.text.toString()
             if (name.isBlank()) {

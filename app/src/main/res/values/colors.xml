@@ -2,12 +2,16 @@
 <resources>
     <color name="purple_200">#4E9C9D</color>
     <color name="purple_500">#2295F1</color>
-    <color name="purple_700">#9CC5C5</color>
+    <color name="purple_700">#2B2D30</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="bottom_nav_bg">#4F9D9E</color>
+    <color name="bottom_nav_bg">#0897B4</color>
+
+    <color name="background">#4CABA6</color>
+
+    <color name="make_result_color">#F2CDAC</color>
     <color name="nav_item_selected">#CCB2DC</color> <!-- 선택된 아이템 -->
     <color name="nav_item_default">#9E9E9E</color> <!-- 비선택 아이템 -->
 

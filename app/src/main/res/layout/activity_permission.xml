@@ -1,0 +1,149 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_alignParentTop="true"
+    android:background="#121212">
+
+    <LinearLayout
+        android:id="@+id/A_permisson_des_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center">
+        <LinearLayout
+            android:id="@+id/A_1permisson_des_box"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#262E28"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/permisson_des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:text="권한 요구 페이지" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/A_permisson_get"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:background="#D03030">
+
+        <LinearLayout
+            android:id="@+id/A_permisson_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#262E28"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/A_permisson_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:text="위치 서비스 허용 요청" />
+
+            <TextView
+                android:id="@+id/A_permisson_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="위치 기반 서비스 사용을 위해 위치 권한을 요청합니다."
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/headerlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/headerTimeBox"
+            android:background="#222222"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <Button
+                android:id="@+id/btn_request_A_permissions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="권한 요청하기"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#4CAF50" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/B_permisson_get"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:background="#D03030">
+
+        <LinearLayout
+            android:id="@+id/B_permisson_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#262E28"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/B_permisson_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:text="타앱 상단 표기 허용 요청" />
+
+            <TextView
+                android:id="@+id/B_permisson_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="잠금 서비스를 구동하기 위해 타앱 상단에 노출될 권리를 요청합니다."
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/headerlock_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/headerTimeBox"
+            android:background="#222222"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <Button
+                android:id="@+id/btn_request_B_permissions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="권한 요청하기"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#4CAF50" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:background="#D03030" />
+</LinearLayout>

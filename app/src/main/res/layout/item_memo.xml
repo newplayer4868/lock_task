@@ -3,7 +3,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="12dp"
-    android:background="#9DC7C7"
+    android:background="@color/make_result_color"
     android:elevation="2dp"
     android:layout_marginBottom="8dp">
 
@@ -19,10 +19,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+
             android:hint="할 일 제목"
             android:maxLines="1"
             android:inputType="textPersonName"
             android:background="@null"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 

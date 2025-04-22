@@ -15,7 +15,6 @@ class BootReceiver : BroadcastReceiver() {
             Log.d("BootReceiver", "🚀 부팅 완료 - 조건 평가 루프 시작")
 
             // 핸드폰 키자마자 조건검사루프 시작
-            com.cap.locktask.utils.ScheduleChecker.schedule(context)
             Log.d("BootReceiver", "📤 ScheduleChecker.schedule(context) 호출")
             AlarmScheduler.scheduleRepeatingAlarm(context)
             Log.d("Alarmreceiver", "📤 Alarm receiver 호출")

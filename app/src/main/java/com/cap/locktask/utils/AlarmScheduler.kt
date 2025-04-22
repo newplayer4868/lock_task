@@ -21,7 +21,7 @@ object AlarmScheduler {
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             System.currentTimeMillis(),
-            60 * 1000, // 60초 주기
+            30 * 1000, // 30
 
             pendingIntent
 

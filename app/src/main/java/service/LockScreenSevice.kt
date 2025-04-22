@@ -20,6 +20,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import model.Preset
+import java.util.Date
+import java.util.Locale
 
 class LockScreenService : Service() {
 
@@ -117,6 +119,7 @@ class LockScreenService : Service() {
     private fun showLockScreen() {
         val inflater = LayoutInflater.from(this)
         lockScreenView = inflater.inflate(R.layout.l_lockscreen_layout, null)
+        val timeTextView = lockScreenView?.findViewById<TextView>(R.id.timeTextView)
 
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT,
@@ -130,7 +133,13 @@ class LockScreenService : Service() {
                     WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
             PixelFormat.TRANSLUCENT
         )
-
+        CoroutineScope(Dispatchers.Main).launch {
+            while (lockScreenView != null) {
+                val now = java.text.SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+                timeTextView?.text = now
+                kotlinx.coroutines.delay(1000)  // 1초마다 갱신
+            }
+        }
         val unlockBtn = lockScreenView?.findViewById<Button>(R.id.unlockButton)
         val runPreset = SharedPreferencesUtils.loadPreset(applicationContext, "runpreset")
         val infoTextView = lockScreenView?.findViewById<TextView>(R.id.presetInfoTextView)

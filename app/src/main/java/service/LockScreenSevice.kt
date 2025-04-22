@@ -75,8 +75,7 @@ class LockScreenService : Service() {
 
 
         val runPreset = SharedPreferencesUtils.loadPreset(applicationContext, "runpreset")
-        val allowedApps = runPreset?.selectedApps ?: emptyList()
-        val appContainer = lockScreenView?.findViewById<LinearLayout>(R.id.appShortcutContainer)
+
         val selectedApps = runPreset?.selectedApps
         if (!selectedApps.isNullOrEmpty()) {
             val targetPackage = selectedApps[0]
@@ -183,13 +182,16 @@ class LockScreenService : Service() {
 
 
         val infoText = runPreset?.let {
-            """
-    🔒 활성화된 프리셋: ${it.name}
-    ⏰ 시작: ${it.startTime} ~ 종료: ${it.endTime}
-    🔁 요일: ${it.week?.joinToString(", ") ?: "모든 요일"}
-    🔓 남은 긴급 해제 횟수: ${it.unlocknum}
-    """.trimIndent()
+            buildString {
+                appendLine("🔒 실행 중인 잠금 이름: ${it.name}")
+                if (!it.startTime.isNullOrEmpty() && !it.endTime.isNullOrEmpty()) {
+                    appendLine("⏰ 시작: ${it.startTime} ~ 종료: ${it.endTime}")
+                }
+                appendLine("🔓 잠금 형태: ${it.lockType}")
+                appendLine("🔓 남은 긴급 해제 횟수: ${it.unlocknum}")
+            }
         } ?: "⚠️ 프리셋 정보 없음"
+
 
         infoTextView?.text = infoText
 // 앱 바로가기 버튼 생성

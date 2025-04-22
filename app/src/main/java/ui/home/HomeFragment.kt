@@ -23,11 +23,6 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.b_fragment_home, container, false)
 
-        // 잠금 버튼 클릭 이벤트
-        view.findViewById<View>(R.id.lockButton).setOnClickListener {
-            Log.d("HomeFragment", "\uD83D\uDD12 lockButton 클릭된다")
-            startLockScreenService()
-        }
 
         // 🎵 음악 선택 버튼 클릭 이벤트
         view.findViewById<Button>(R.id.musicButton).setOnClickListener {

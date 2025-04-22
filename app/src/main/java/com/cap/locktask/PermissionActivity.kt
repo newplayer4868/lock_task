@@ -1,13 +1,19 @@
 package com.cap.locktask
 
 import android.Manifest
+import android.app.AppOpsManager
+import android.app.usage.UsageStatsManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +30,20 @@ class PermissionActivity : AppCompatActivity() {
         val locationBtn = findViewById<Button>(R.id.btn_request_A_permissions)
         val overlayBtn = findViewById<Button>(R.id.btn_request_B_permissions)
         val accessibilityBtn = findViewById<Button>(R.id.btn_request_C_permissions)
+        val usageStatsBtn = findViewById<Button>(R.id.btn_request_D_permissions)
+
+        // ✅ 모든 버튼 초기 색상 반영
+        updatePermissionButtonState(locationBtn, isGranted(Manifest.permission.ACCESS_FINE_LOCATION))
+        updatePermissionButtonState(overlayBtn, Settings.canDrawOverlays(this))
+        updatePermissionButtonState(accessibilityBtn, isAccessibilityServiceEnabled())
+        updatePermissionButtonState(usageStatsBtn, isUsageStatsPermissionGranted())
+        usageStatsBtn.setOnClickListener {
+            val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // 꼭 추가
+            }
+            startActivity(intent)
+        }
+
 
         accessibilityBtn.setOnClickListener {
             openAccessibilitySettings()
@@ -95,17 +115,40 @@ class PermissionActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        val locationGranted = isGranted(Manifest.permission.ACCESS_FINE_LOCATION)
-        val overlayGranted = Settings.canDrawOverlays(this)
-        val accessibilityGranted = isAccessibilityServiceEnabled()
+        Handler(Looper.getMainLooper()).postDelayed({
+            val locationGranted = isGranted(Manifest.permission.ACCESS_FINE_LOCATION)
+            val overlayGranted = Settings.canDrawOverlays(this)
+            val accessibilityGranted = isAccessibilityServiceEnabled()
+            val usageGranted = isUsageStatsPermissionGranted()
 
-        updatePermissionButtonState(findViewById(R.id.btn_request_A_permissions), locationGranted)
-        updatePermissionButtonState(findViewById(R.id.btn_request_B_permissions), overlayGranted)
-        updatePermissionButtonState(findViewById(R.id.btn_request_C_permissions), accessibilityGranted)
+            updatePermissionButtonState(findViewById(R.id.btn_request_A_permissions), locationGranted)
+            updatePermissionButtonState(findViewById(R.id.btn_request_B_permissions), overlayGranted)
+            updatePermissionButtonState(findViewById(R.id.btn_request_C_permissions), accessibilityGranted)
+            updatePermissionButtonState(findViewById(R.id.btn_request_D_permissions), usageGranted)
 
-        if (locationGranted && overlayGranted && accessibilityGranted) {
-            navigateToMain()
+            if (locationGranted && overlayGranted && accessibilityGranted && usageGranted) {
+                navigateToMain()
+            }
+        }, 500)
+    }
+
+    fun isUsageStatsPermissionGranted(): Boolean {
+        val usageStatsManager = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        val end = System.currentTimeMillis()
+        val start = end - 1000L * 60 * 60 * 24 * 7  // 최근 7일 사용 기록 확인
+
+        val stats = usageStatsManager.queryUsageStats(
+            UsageStatsManager.INTERVAL_DAILY, start, end
+        )
+
+        stats?.forEach {
+            Log.d("PermissionCheck", "📱 앱: ${it.packageName}, 사용시간: ${it.totalTimeInForeground / 1000}s")
         }
+
+        val granted = stats != null && stats.any { it.totalTimeInForeground > 0 }
+        Log.d("PermissionCheck", "✅ 사용량 권한 granted: $granted")
+
+        return granted
     }
 
 
@@ -119,6 +162,7 @@ class PermissionActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
+
 
     private fun isGranted(permission: String): Boolean {
         return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED

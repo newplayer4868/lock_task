@@ -3,7 +3,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_alignParentTop="true"
-    android:background="#121212">
+    android:background="#FFFFFF">
 
     <LinearLayout
         android:id="@+id/A_permisson_des_box"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentTop="true"
-        android:background="#D03030">
+        android:background="#FFFFFF">
 
         <LinearLayout
             android:id="@+id/A_permisson_name"
@@ -92,12 +92,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentTop="true"
-        android:background="#D03030">
+        android:background="#FFFFFF">
 
         <LinearLayout
             android:id="@+id/B_permisson_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="#262E28"
             android:padding="12dp">
@@ -145,7 +145,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentTop="true"
-        android:background="#D03030">
+        android:background="#FFFFFF">
 
         <LinearLayout
             android:id="@+id/C_permisson_name"
@@ -199,7 +199,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_alignParentTop="true"
-            android:background="#D03030"/>
+            android:background="#FFFFFF"/>
 
             <LinearLayout
                 android:id="@+id/D_permisson_name"
@@ -252,5 +252,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentTop="true"
-        android:background="#D03030" />
+        android:background="#FFFFFF" />
 </LinearLayout>

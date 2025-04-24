@@ -59,21 +59,22 @@ object PresetEvaluator {
                 LockStateManager.restoreStayTime(context, name)
                 val isRunPreset = currentRunPreset?.name == name
                 if (isRunPreset) {
-                    Log.d("PresetEvaluator", "⚠️ 실행 중인 프리셋 [$name] 평가 제외됨")
+                    //Log.d("PresetEvaluator", "⚠️ 실행 중인 프리셋 [$name] 평가 제외됨")
                     continue
                 }
                 try {
-                    Log.d("PresetEvaluator", "🧪 [$name] 프리셋 로드 시도")
+                    //Log.d("PresetEvaluator", "🧪 [$name] 프리셋 로드 시도")
                     val preset = SharedPreferencesUtils.loadPreset(context, name)
 
                     if (preset == null) {
-                        Log.w("PresetEvaluator", "⚠️ [$name] 프리셋 로드 실패 → null")
+                        //Log.w("PresetEvaluator", "⚠️ [$name] 프리셋 로드 실패 → null")
                         continue
                     }
 
                     Log.d("PresetEvaluator", "🔍 프리셋 평가 중: ${preset.name}")
                     Log.d("PresetEvaluator", "   ├─ 시작 시간: ${preset.startTime}")
                     Log.d("PresetEvaluator", "   ├─ 종료 시간: ${preset.endTime}")
+                    Log.d("PresetEvaluator", "   ├─ 기간: ${preset.Time}")
                     Log.d("PresetEvaluator", "   ├─ 요일: ${preset.week}")
                     Log.d("PresetEvaluator", "   ├─ 위치 조건: ${preset.latitude}")
                     Log.d("PresetEvaluator", "   ├─ 위치 조건: ${preset.longitude}")

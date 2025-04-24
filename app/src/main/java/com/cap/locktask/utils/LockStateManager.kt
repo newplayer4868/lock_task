@@ -52,27 +52,10 @@ object LockStateManager {
     }
 
 
-
     fun getState(presetName: String): LockState =
         activeStates.getOrPut(presetName) { LockState(presetName) }
 
-    fun markInvalid(presetName: String, durationMillis: Long = 5 * 60 * 1000L) {
-        getState(presetName).invalidUntil = System.currentTimeMillis() + durationMillis
-    }
 
-    fun isCurrentlyInvalid(presetName: String): Boolean {
-        val invalidUntil = getState(presetName).invalidUntil
-        return invalidUntil != null && System.currentTimeMillis() < invalidUntil
-    }
-
-    fun updateStayTime(presetName: String, isInside: Boolean) {
-        val state = getState(presetName)
-        if (isInside) {
-            if (state.stayStartTime == null) state.stayStartTime = System.currentTimeMillis()
-        } else {
-            state.stayStartTime = null // 나갔다가 다시 들어오면 초기화
-        }
-    }
 
     fun hasStayedEnough(presetName: String, requiredMillis: Long): Boolean {
         val state = getState(presetName)

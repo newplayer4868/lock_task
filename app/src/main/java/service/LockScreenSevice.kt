@@ -17,7 +17,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.cap.locktask.R
 import com.cap.locktask.manager.LockPresetManager
-import com.cap.locktask.utils.PresetEvaluator
+import com.cap.locktask.utils.AppUsageTracker
+import com.cap.locktask.utils.LockStateManager
 import com.cap.locktask.utils.SharedPreferencesUtils
 import com.cap.locktask.worker.PresetCheckWorker
 import kotlinx.coroutines.CoroutineScope
@@ -25,8 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import model.Preset
-import java.util.Date
-import java.util.Locale
+
 
 class LockScreenService : Service() {
 
@@ -161,19 +161,46 @@ class LockScreenService : Service() {
                 val nowFormatted = String.format("%02d:%02d:%02d", hour, minute, second)
                 timeTextView?.text = nowFormatted
 
-                // 프리셋 종료 시간 파싱
                 val endTimeStr = runPreset?.endTime ?: "00:00"
                 val endHour = endTimeStr.split(":").getOrNull(0)?.toIntOrNull() ?: -1
                 val endMinute = endTimeStr.split(":").getOrNull(1)?.toIntOrNull() ?: -1
-                // 현재 시각 - 1분
-                val oneMinuteAgo = cal.clone() as java.util.Calendar
-                oneMinuteAgo.add(java.util.Calendar.MINUTE, -1)
-
 
                 if (hour == endHour && minute == endMinute + 1) {
                     val request = OneTimeWorkRequestBuilder<PresetCheckWorker>().build()
                     WorkManager.getInstance(applicationContext).enqueue(request)
                 }
+
+                //
+                val state = LockStateManager.getState(runPreset?.name ?: "")
+                val start = state.stayStartTime
+                val elapsed = if (start != null) System.currentTimeMillis() - start else 0L
+                val total = state.totalStayMillis + elapsed
+
+
+
+
+                val infoText = buildString {
+                    appendLine("🔒 실행 중인 잠금 이름: ${runPreset?.name}")
+                    if (!runPreset?.startTime.isNullOrEmpty() && !runPreset?.endTime.isNullOrEmpty()) {
+                        appendLine("⏰ 시작: ${runPreset?.startTime} ~ 종료: ${runPreset?.endTime}")
+                    }
+                    if (runPreset?.lockType == "목적지 잠금 해제") {
+                        appendLine("목표 목적지 거주 시간: ${(runPreset?.Time)}분")
+                        appendLine("머문 시간: ${total /(60*1000)}분")
+                        if ((total /(60*1000)).toString()== runPreset.Time) {
+                            Log.d(TAG, "종말의 시간이다")
+                            val request = OneTimeWorkRequestBuilder<PresetCheckWorker>().build()
+                            WorkManager.getInstance(applicationContext).enqueue(request)
+                        }
+//                        val a:String= (total /(60*1000)).toString()
+//                        Log.d(TAG, "ㅇㅇㅇㅇㅇㅇ: ${a}")
+                    }
+                    appendLine("🔓 잠금 형태: ${runPreset?.lockType}")
+                    appendLine("🔓 남은 긴급 해제 횟수: ${runPreset?.unlocknum}")
+                }
+
+                infoTextView?.text = infoText
+
                 delay(1000)
             }
         }
@@ -181,19 +208,7 @@ class LockScreenService : Service() {
 
 
 
-        val infoText = runPreset?.let {
-            buildString {
-                appendLine("🔒 실행 중인 잠금 이름: ${it.name}")
-                if (!it.startTime.isNullOrEmpty() && !it.endTime.isNullOrEmpty()) {
-                    appendLine("⏰ 시작: ${it.startTime} ~ 종료: ${it.endTime}")
-                }
-                appendLine("🔓 잠금 형태: ${it.lockType}")
-                appendLine("🔓 남은 긴급 해제 횟수: ${it.unlocknum}")
-            }
-        } ?: "⚠️ 프리셋 정보 없음"
 
-
-        infoTextView?.text = infoText
 // 앱 바로가기 버튼 생성
         val shortcutContainer = lockScreenView?.findViewById<LinearLayout>(R.id.appShortcutContainer)
         val pm = packageManager
@@ -276,7 +291,10 @@ class LockScreenService : Service() {
         }
         Log.d(TAG, "🛑 LockScreenService 종료됨")
     }
-
+    private fun convertTimeToMillis_in_lock(time: String?): Long {
+        val minutes = time?.toIntOrNull() ?: return 0L
+        return minutes * 60_000L
+    }
     override fun onBind(intent: Intent?): IBinder? = null
 
 

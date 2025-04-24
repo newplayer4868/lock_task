@@ -92,8 +92,6 @@ object PresetConditionUtil {
 
 
             val requiredMillis = convertTimeToMillis(preset.Time)
-            val stayedMillis = System.currentTimeMillis() -
-                    (LockStateManager.getState(presetName).stayStartTime ?: System.currentTimeMillis())
             val state = LockStateManager.getState(presetName)
             val start = state.stayStartTime
             val elapsed = if (start != null) System.currentTimeMillis() - start else 0L

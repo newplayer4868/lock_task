@@ -1,7 +1,6 @@
 package com.cap.locktask
 
 import android.Manifest
-import android.app.AppOpsManager
 import android.app.usage.UsageStatsManager
 import android.content.ComponentName
 import android.content.Context
@@ -32,14 +31,14 @@ class PermissionActivity : AppCompatActivity() {
         val accessibilityBtn = findViewById<Button>(R.id.btn_request_C_permissions)
         val usageStatsBtn = findViewById<Button>(R.id.btn_request_D_permissions)
 
-        // ✅ 모든 버튼 초기 색상 반영
         updatePermissionButtonState(locationBtn, isGranted(Manifest.permission.ACCESS_FINE_LOCATION))
         updatePermissionButtonState(overlayBtn, Settings.canDrawOverlays(this))
         updatePermissionButtonState(accessibilityBtn, isAccessibilityServiceEnabled())
         updatePermissionButtonState(usageStatsBtn, isUsageStatsPermissionGranted())
+
         usageStatsBtn.setOnClickListener {
             val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // 꼭 추가
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             startActivity(intent)
         }
@@ -62,7 +61,6 @@ class PermissionActivity : AppCompatActivity() {
                 navigateToMain()
             }
         }
-
 
         // 오버레이 권한 요청
         overlayBtn.setOnClickListener {

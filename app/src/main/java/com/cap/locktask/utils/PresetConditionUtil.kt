@@ -202,14 +202,14 @@ object PresetConditionUtil {
         if (preset.latitude == null || preset.longitude == null || preset.radius == null || userLocation == null) return true
 
         val presetLocation = Location("").apply {
-            latitude = preset.latitude
-            longitude = preset.longitude
+            latitude = preset.latitude!!
+            longitude = preset.longitude!!
         }
 
         val distance = userLocation.distanceTo(presetLocation) // 미터 단위
         Log.d("PresetConditionUtil", "📏 거리 계산됨: $distance / 기준: ${preset.radius}")
 
-        return distance <= preset.radius
+        return distance <= preset.radius!!
     }
 
 //요일 맞는가에 대한 비교 함수

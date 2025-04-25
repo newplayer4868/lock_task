@@ -1,0 +1,304 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@color/make_result_color"
+    android:elevation="2dp"
+    android:layout_marginBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/item_Lcok_Name"
+            android:text="잠금 이름"
+            android:textColor="#000000"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+    <!-- ▼ 상세설정 토글 -->
+    <TextView
+        android:id="@+id/item_Lock_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="▼ 상세 설정"
+        android:textColor="#2196F3"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- 👇 펼쳐지는 상세 설정 영역 -->
+    <!--        android:visibility="gone"-->
+    <LinearLayout
+        android:id="@+id/layoutSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginTop="8dp">
+
+        <!-- 설명 -->
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="설명 입력"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:maxLines="4"
+            android:gravity="top|start"
+            android:background="@null"
+            android:textSize="14sp" />
+
+
+
+
+        <!--            목적지 잠금해제에서 기간 설정하는데 쓰일 버튼 2개-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                style="@style/SettingTextViewStyle"
+                android:id="@+id/text_Due_Date"
+                android:text="기한 선택"
+                />
+            <TextView
+                android:id="@+id/infoviewzone_due"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#888888"
+                android:textSize="14sp"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp" />
+            <Button
+                android:id="@+id/button_Start_Time_Set"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="시작 시간" />
+            <Button
+                android:id="@+id/button_End_Time_Set"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="종료 시간" />
+        </LinearLayout>
+
+
+        <!--        시간 설정 관련 버튼-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                style="@style/SettingTextViewStyle"
+                android:id="@+id/text_Time"
+                android:text="시간 설정"
+ />
+            <Button
+                android:id="@+id/button_Time_Set"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="머물 기간 설정" />
+        </LinearLayout>
+
+        <!--        사용 가능 어플 설정 버튼-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                style="@style/SettingTextViewStyle"
+                android:id="@+id/text_Selected_App"
+                android:text="어플 선택"
+/>
+
+            <Button
+                android:id="@+id/button_App_Selected_App_Set"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="어플 선택" />
+        </LinearLayout>
+
+        <!--        좌표 재설정-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                style="@style/SettingTextViewStyle"
+                android:id="@+id/text_Geo"
+                android:text="활성화 위치 선택"
+/>
+            <Button
+                android:id="@+id/button_Geo_Set"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="목적지 설정" />
+        </LinearLayout>
+
+        <!--        val unlocknum:Int?=3,-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+            <Button
+                android:id="@+id/button_Unlock_Minus"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="Minus-" />
+            <TextView
+                style="@style/SettingTextViewStyle"
+                android:id="@+id/text_Unlock"
+                android:text="잠금 해제 횟수"
+                android:gravity="center"
+/>
+            <Button
+                android:id="@+id/button_Unlock_Plus"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textSize="20dp"
+                android:layout_height="wrap_content"
+                android:text="Plus+" />
+
+        </LinearLayout>
+
+
+
+
+        <!--        활성화 요일 설정-->
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="요일 선택"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="7">
+            <RadioButton
+                android:text="월"
+                android:id="@+id/rg_btn1"
+                style="@style/LayoutWeight1Style" />
+            <RadioButton
+
+                android:text="화"
+                android:id="@+id/rg_btn2"
+                style="@style/LayoutWeight1Style"/>
+            <RadioButton
+                android:layout_weight="1"
+                android:text="수"
+                style="@style/LayoutWeight1Style"/>
+            <RadioButton
+                android:text="목"
+                android:id="@+id/rg_btn4"
+                style="@style/LayoutWeight1Style" />
+            <RadioButton
+                android:text="금"
+                android:id="@+id/rg_btn5"
+                style="@style/LayoutWeight1Style" />
+            <RadioButton
+
+                android:text="토"
+                android:id="@+id/rg_btn6"
+                style="@style/LayoutWeight1Style"/>
+            <RadioButton
+                android:text="일"
+                android:id="@+id/rg_btn7"
+                style="@style/LayoutWeight1Style" />
+
+
+
+        </LinearLayout>
+        <!--        var isactivity:Boolean=true,-->
+
+        <!-- 분류 선택 -->
+        <TextView
+            android:id="@+id/textCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="분류 선택"
+            android:textColor="#555"
+            android:padding="8dp"
+            android:background="@drawable/bg_category_border"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="8dp" />
+
+        <!-- 분류 선택 옵션들 -->
+        <LinearLayout
+            android:id="@+id/layoutCategoryOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/optionUrgentImportant"
+                style="@style/CategoryOptionStyle"
+                android:text="긴급and중요" />
+            <TextView
+                android:id="@+id/optionUrgent"
+                style="@style/CategoryOptionStyle"
+                android:text="긴급" />
+
+            <TextView
+                android:id="@+id/optionImportant"
+                style="@style/CategoryOptionStyle"
+                android:text="중요" />
+
+            <TextView
+                android:id="@+id/optionNone"
+                style="@style/CategoryOptionStyle"
+                android:text="둘 다 아님" />
+            <TextView
+                android:id="@+id/optionNull"
+                style="@style/CategoryOptionStyle"
+                android:text="선택 안함" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/button_Save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="저장" />
+    </LinearLayout>
+
+</LinearLayout>

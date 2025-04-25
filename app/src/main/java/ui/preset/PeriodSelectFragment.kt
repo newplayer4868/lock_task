@@ -54,7 +54,7 @@ class PeriodSelectFragment : Fragment() {
             }
 
             viewModel.updateField {
-                it.copy(startTime = startTime, endTime = endTime)
+                it.copy(startTime = startTime, endTime = endTime,)
             }
 
             val nextIndex = arguments?.getInt("nextIndex") ?: return@setOnClickListener

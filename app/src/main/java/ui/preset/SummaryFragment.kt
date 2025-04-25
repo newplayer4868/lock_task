@@ -17,8 +17,8 @@ import viewmodel.PresetViewModel
 class SummaryFragment : Fragment() {
 
     private val viewModel: PresetViewModel by activityViewModels()
-
     private lateinit var nameInput: EditText
+    private lateinit var DescriptionInput: EditText
     private lateinit var lockTypeText: TextView
     private lateinit var saveButton: Button
 
@@ -28,6 +28,7 @@ class SummaryFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.c_fragment_summary, container, false)
 
+        DescriptionInput=view.findViewById(R.id.descriptionInput)
         nameInput = view.findViewById(R.id.nameInput)
         lockTypeText = view.findViewById(R.id.lockTypeText)
         saveButton = view.findViewById(R.id.saveButton)
@@ -35,10 +36,11 @@ class SummaryFragment : Fragment() {
         viewModel.preset.observe(viewLifecycleOwner) { preset ->
             lockTypeText.text = "락타입: ${preset.lockType}"
             nameInput.setText(preset.name)
+            DescriptionInput.setText((preset.description))
         }
 
         saveButton.setOnClickListener {
-
+            val description=DescriptionInput.text.toString()
             val name = nameInput.text.toString()
             if (name.isBlank()) {
                 Toast.makeText(requireContext(), "프리셋 이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
@@ -51,7 +53,10 @@ class SummaryFragment : Fragment() {
             }
 
             viewModel.updateField {
-                it.copy(name = name)
+                it.copy(
+                    name = name,
+                    description = description
+                )
             }
 
             val updatedPreset = viewModel.preset.value!!
@@ -62,7 +67,6 @@ class SummaryFragment : Fragment() {
             }
 
             SharedPreferencesUtils.savePreset(requireContext(), updatedPreset.name, updatedPreset)
-
             Toast.makeText(requireContext(), "프리셋 저장 완료!", Toast.LENGTH_SHORT).show()
 
             val request = OneTimeWorkRequestBuilder<PresetCheckWorker>().build()

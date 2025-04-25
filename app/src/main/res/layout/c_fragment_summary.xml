@@ -11,17 +11,35 @@
         android:text="락타입: "
         android:textSize="16sp"
         android:paddingBottom="12dp" />
-
+    <TextView
+        android:id="@+id/nameinsinput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="이름 입력 "
+        android:textSize="16sp"
+        android:paddingBottom="12dp" />
     <EditText
         android:id="@+id/nameInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="프리셋 이름을 입력하세요" />
-
+    <TextView
+        android:id="@+id/desinsinput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="잠금 설명 입력 "
+        android:textSize="16sp"
+        android:paddingBottom="12dp" />
+    <EditText
+        android:id="@+id/descriptionInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="잠금 설명을 입력하세요" />
     <Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="저장"
         android:layout_marginTop="24dp" />
+
 </LinearLayout>

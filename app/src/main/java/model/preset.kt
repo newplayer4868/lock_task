@@ -19,6 +19,9 @@ data class Preset(
 
     var onmemoQA:Boolean=false,//이거 메모에 생성할거임?//필요없게 만드는 방식 가능할거 가틍ㄴ데
 
+    var isChecked: Boolean? = null,//체크 박스
+
+
     var isactivity:Boolean=true,//이거 활성화임?
     var description:String?=null,//잠금 묘사용 설명
     val requiredStayMillis: Long = 60_000L

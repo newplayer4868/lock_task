@@ -14,6 +14,7 @@ import com.cap.locktask.R
 import model.Preset
 import ui.preset.PresetEditActivity
 import com.cap.locktask.utils.SharedPreferencesUtils
+import ui.PopupDialogFragment
 import ui.preset.ButtonInfoActivity
 
 
@@ -155,9 +156,10 @@ class Page1Fragment : Fragment(R.layout.b_fragment_page1) {
             text = preset.name
             layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
             setOnClickListener {
-                val intent = Intent(context, ButtonInfoActivity::class.java)
-                intent.putExtra("preset", preset)
-                startActivity(intent)
+                PopupDialogFragment(preset).show(parentFragmentManager, "PopupDialog")
+//                val intent = Intent(context, ButtonInfoActivity::class.java)
+//                intent.putExtra("preset", preset)
+//                startActivity(intent)
             }
         }
 

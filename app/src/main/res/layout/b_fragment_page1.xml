@@ -41,7 +41,17 @@
 
 
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/page1_timer_container"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
 
+        <!-- 여기에 시계 NeedView, NumberPicker, 시작버튼을 동적으로 추가할거야 -->
+
+    </LinearLayout>ㅋ
     <!-- 생성된 버튼 컨테이너 -->
     <LinearLayout
         android:id="@+id/container"

@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lockRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+    <!-- 상단: 시간 박스 -->
+    <LinearLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:background="#D03030">
+        <LinearLayout
+            android:id="@+id/headerTimeBox"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#262E28"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:gravity="end|center_vertical">
+
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:text="00:00:00" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/headerlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/headerTimeBox"
+            android:background="#222222"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/presetInfoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="잠금 정보 로딩 중..."
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textAlignment="viewStart"
+                android:gravity="start"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/lockInfoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="잠금 중입니다..."
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        android:layout_centerInParent="true" />
+
+
+
+    <Button
+        android:id="@+id/unlockButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="긴급 해제"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="32dp"
+        android:background="@android:color/holo_red_dark"
+        android:textColor="#ffffff" />
+</RelativeLayout>

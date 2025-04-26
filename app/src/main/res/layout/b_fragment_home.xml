@@ -2,9 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@color/background"
     android:layout_height="match_parent">
+
 
     <!-- 중앙 텍스트 -->
     <TextView
@@ -41,5 +43,40 @@
         android:backgroundTint="#5C6BC0"
         app:layout_constraintTop_toBottomOf="@id/musicButton"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <LinearLayout
+        android:id="@+id/bottomLeftButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="533dp"> <!-- 바텀 네비게이션 높이 감안 -->
+
+        <Button
+            android:id="@+id/aButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#5C6BC0"
+            android:text="시작"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageButton" />
+
+        <Button
+            android:id="@+id/bButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#5C6BC0"
+            android:text="설정"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/aButton" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

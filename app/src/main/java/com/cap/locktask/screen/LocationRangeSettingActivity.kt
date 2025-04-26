@@ -43,9 +43,10 @@ class LocationRangeSettingActivity : AppCompatActivity(), OnMapReadyCallback {
         seekBar = findViewById(R.id.rangeSeekBar)
 
         // 기본값
-        seekBar.max = 1000
-        seekBar.progress = 500
-        radiusTextView.text = "범위: 500m"
+        seekBar.max = 500
+        seekBar.min = 10
+        seekBar.progress = 100
+        radiusTextView.text = "범위: 100m"
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -105,7 +106,7 @@ class LocationRangeSettingActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun moveToLocation(latLng: LatLng) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
         mMap.clear()
         mMap.addMarker(MarkerOptions().position(latLng).title("선택된 위치"))
         selectedLocation = latLng
@@ -129,7 +130,7 @@ class LocationRangeSettingActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         val seoul = LatLng(37.5665, 126.9780)
         mMap.addMarker(MarkerOptions().position(seoul).title("서울"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(seoul, 15f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(seoul, 20f))
 
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.mapType = GoogleMap.MAP_TYPE_NORMAL

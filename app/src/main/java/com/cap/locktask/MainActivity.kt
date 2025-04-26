@@ -22,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.RECEIVE_BOOT_COMPLETED,
         Manifest.permission.FOREGROUND_SERVICE,
+        Manifest.permission.READ_PHONE_STATE,
+        Manifest.permission.SEND_SMS,
+        Manifest.permission.READ_CALL_LOG
     ).apply {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
             add(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -70,12 +73,12 @@ class MainActivity : AppCompatActivity() {
 
             if (denied.isNotEmpty()) {
                 Log.w("Permission", "❌ 권한 거부됨: $denied")
-                // 필요하다면 다이얼로그 등 안내
             } else {
                 Log.d("Permission", "✅ 모든 권한 허용됨")
             }
         }
     }
+
 
 
 

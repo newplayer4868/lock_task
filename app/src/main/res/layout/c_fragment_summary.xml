@@ -32,9 +32,10 @@
         android:paddingBottom="12dp" />
     <EditText
         android:id="@+id/descriptionInput"
+        android:hint="잠금 설명을 입력하세요"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="잠금 설명을 입력하세요" />
+        />
     <Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
